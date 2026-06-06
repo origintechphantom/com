@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OriginTech Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="./image.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <!-- Login Screen -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-microchip"></i>
+                <h1>OriginTech Admin</h1>
+                <p>Dashboard Login</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="Enter your username" 
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Enter your password" 
+                            required
+                        >
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="loginError" class="error-message"></div>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardContainer" class="dashboard-container hidden">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-microchip"></i>
+                <h2>OriginTech</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="messages">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                    <span class="badge" id="messageBadge">0</span>
+                </button>
+                <button class="nav-item" data-section="replies">
+                    <i class="fas fa-reply"></i>
+                    <span>Replies</span>
+                </button>
+                <button class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </nav>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <div class="admin-topbar">
+                <h1 id="sectionTitle">Messages</h1>
+                <div class="topbar-actions">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="adminUsername">Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <section id="messagesSection" class="admin-section active">
+                <div class="section-content">
+                    <div class="messages-container">
+                        <div id="messagesList" class="messages-list">
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>No messages yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Message Detail Modal -->
+            <div id="messageModal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Message Details</h2>
+                        <button class="close-modal" id="closeModal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="message-details">
+                            <div class="detail-group">
+                                <label>From:</label>
+                                <p id="detailName"></p>
+                            </div>
+                            <div class="chat-container">
+                                <div class="chat-header">
+                                    <label>Conversation</label>
+                                </div>
+                                <div class="chat-body">
+                                    <div class="chat-history" id="chatHistory"></div>
+                                    <div id="replySection" class="chat-input-area">
+                                        <textarea id="replyText" placeholder="Type your reply..."></textarea>
+                                        <button id="sendReplyBtn" class="reply-btn">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replies Section -->
+            <section id="repliesSection" class="admin-section hidden">
+                <div class="section-content">
+                    <div id="repliesList" class="replies-list">
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle"></i>
+                            <p>No replies sent yet</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settingsSection" class="admin-section hidden">
+                <div class="section-content">
+                    <div class="settings-panel">
+                        <h3>Admin Settings</h3>
+                        <div class="setting-item">
+                            <label>Current Username:</label>
+                            <p><strong id="currentUsernameDisplay">Harrison</strong></p>
+                        </div>
+                        <div class="setting-item">
+                            <button id="changePasswordBtn" class="change-password-btn">
+                                Change Password
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <label>Total Messages Received:</label>
+                            <p><strong id="totalMessages">0</strong></p>
+                        </div>
+                        <div class="setting-item">
+                            <label>Total Replies Sent:</label>
+                            <p><strong id="totalReplies">0</strong></p>
+                        </div>
+                        <div class="admin-management">
+                            <h4>Manage Admin Accounts</h4>
+                            <form id="addAdminForm" class="admin-form">
+                                <div class="form-group">
+                                    <label for="newAdminUsername">Username</label>
+                                    <input type="text" id="newAdminUsername" placeholder="New admin username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newAdminPassword">Password</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="newAdminPassword" placeholder="New admin password" required>
+                                        <button type="button" class="toggle-password" id="toggleAdminPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="save-btn">Add Admin</button>
+                            </form>
+                            <div class="admin-list-panel">
+                                <h5>Current Admins</h5>
+                                <ul id="adminList" class="admin-list"></ul>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <button id="clearAllBtn" class="delete-btn">
+                                Clear All Messages & Replies
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <button id="resetAdminsBtn" class="delete-btn">
+                                Reset Default Admins
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Change Password</h2>
+                <button class="close-modal" id="closePasswordModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label>Current Password:</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password:</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password:</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <div id="passwordError" class="error-message"></div>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Admins Confirmation Modal -->
+    <div id="resetAdminsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset Admin Accounts</h2>
+                <button class="close-modal" id="closeResetAdminsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This will remove any custom admin accounts and restore only the default admin users.</p>
+                <div class="modal-actions">
+                    <button type="button" id="cancelResetAdminsBtn" class="delete-btn">Cancel</button>
+                    <button type="button" id="confirmResetAdminsBtn" class="save-btn">Reset Admins</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
